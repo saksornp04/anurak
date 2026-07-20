@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เกม AR นักอนุรักษ์ตัวน้อย</title>
+    <!-- Tailwind CSS for modern responsive designs -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for clean, playful icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts with Thai and Playful styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- MediaPipe Hands CDN for browser-based AI hand tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Mitr', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #dcfce7 100%);
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        /* Custom bounce animation for elements */
+        .bubble-hover {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bubble-hover:hover {
+            transform: scale(1.02) translateY(-2px);
+        }
+        .bubble-hover:active {
+            transform: scale(0.98);
+        }
+        /* Glassmorphism styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+        /* Mirrored video preview container */
+        .mirrored {
+            transform: scaleX(-1);
+        }
+        /* Beautiful retro game shadows */
+        .retro-shadow-green {
+            box-shadow: 0 8px 0 0 #15803d;
+        }
+        .retro-shadow-red {
+            box-shadow: 0 8px 0 0 #b91c1c;
+        }
+        .retro-shadow-blue {
+            box-shadow: 0 8px 0 0 #1d4ed8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-2 sm:p-4">
+
+    <!-- Custom Alert Box -->
+    <div id="custom-alert" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 transform -translate-y-20 opacity-0 transition-all duration-500 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl glass-card border-2 max-w-sm w-11/12">
+        <div id="alert-icon" class="text-3xl animate-bounce"></div>
+        <div>
+            <h4 id="alert-title" class="font-bold text-gray-800 text-lg"></h4>
+            <p id="alert-msg" class="text-gray-600 text-sm"></p>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="w-full max-w-6xl mx-auto flex flex-col items-center relative">
+        
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="fixed inset-0 bg-gradient-to-br from-green-400 to-blue-500 z-50 flex flex-col items-center justify-center p-6 text-white text-center">
+            <div class="relative w-32 h-32 mb-6">
+                <!-- Sprouting seedling animation -->
+                <div class="absolute inset-0 rounded-full border-4 border-dashed border-white animate-spin opacity-50"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-6xl">🌱</div>
+            </div>
+            <h2 class="text-3xl font-extrabold mb-2 tracking-wide">กำลังเตรียมความพร้อม...</h2>
+            <p class="text-lg opacity-90 max-w-md" id="loading-status">กำลังเริ่มต้นระบบกล้องและชุดข้อมูลภาพธรรมชาติ...</p>
+            <div class="w-64 h-3 bg-white/20 rounded-full overflow-hidden mt-6">
+                <div id="loading-progress" class="h-full bg-yellow-300 w-12 transition-all duration-500 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- ==================== SCREEN 1: START SCREEN ==================== -->
+        <div id="start-screen" class="w-full flex flex-col items-center text-center p-6 sm:p-10 rounded-3xl glass-card shadow-2xl border-4 border-white bubble-hover max-w-2xl relative overflow-hidden my-4">
+            <!-- Decorative nature patterns -->
+            <div class="absolute -top-12 -left-12 text-6xl opacity-20 select-none animate-bounce">🌳</div>
+            <div class="absolute -bottom-10 -right-10 text-7xl opacity-20 select-none animate-bounce delay-1000">🐳</div>
+            <div class="absolute top-8 right-8 text-5xl opacity-20 select-none animate-pulse">🌸</div>
+            
+            <div class="relative mb-4">
+                <span class="text-7xl block mb-2 animate-bounce">🧑‍🎤</span>
+                <span class="bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">เกมส่งเสริมการอนุรักษ์ธรรมชาติ</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-green-700 mb-3 drop-shadow">นักอนุรักษ์ตัวน้อย</h1>
+            <p class="text-gray-700 text-sm sm:text-base max-w-md mx-auto mb-6 leading-relaxed">
+                เรียนรู้การอนุรักษ์ธรรมชาติด้วยการเล่นเกมผ่านกล้องเว็บแคม! <br>
+                <span class="text-green-600 font-bold">กางมือ 🖐️</span> เลื่อนเป้าชี้ และ <span class="text-orange-600 font-bold">กำมือ ✊</span> บนรูปภาพข้อความเพื่อเลือกคำตอบที่ถูกต้อง
+            </p>
+
+            <!-- Mode selector / Settings -->
+            <div class="w-full bg-white/70 p-4 rounded-2xl mb-6 border border-white/80 flex flex-col gap-3">
+                <h3 class="font-bold text-gray-800 text-sm sm:text-base flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-gear text-green-600"></i> เลือกอุปกรณ์และโหมดการเล่น
+                </h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btn-mode-ar" class="p-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-800 font-bold flex flex-col items-center gap-1 transition-all">
+                        <i class="fa-solid fa-camera text-2xl"></i>
+                        <span class="text-sm">กล้องเว็บแคม AR</span>
+                    </button>
+                    <button id="btn-mode-touch" class="p-3 rounded-xl border-2 border-gray-200 bg-white text-gray-600 font-bold flex flex-col items-center gap-1 transition-all">
+                        <i class="fa-solid fa-hand-pointer text-2xl"></i>
+                        <span class="text-sm">หน้าจอสัมผัส/เมาส์</span>
+                    </button>
+                </div>
+                <p id="mode-desc" class="text-xs text-gray-500 italic mt-1">แนะนำเล่นผ่านโหมดกล้องบน iPad หรือโน๊ตบุ๊ค เพื่อความสนุกและท้าทายในการขยับร่างกาย!</p>
+            </div>
+
+            <button id="btn-start" class="w-full sm:w-auto px-12 py-4 bg-green-500 hover:bg-green-600 text-white font-extrabold text-xl sm:text-2xl rounded-2xl bubble-hover transition-all duration-300 retro-shadow-green border-2 border-white mb-2">
+                เริ่มเกมกันเลย! 🎮
+            </button>
+        </div>
+
+        <!-- ==================== SCREEN 2: GAMEPLAY CONTAINER ==================== -->
+        <div id="game-screen" class="hidden w-full flex flex-col lg:flex-row gap-6 items-stretch justify-center relative">
+            
+            <!-- LEFT PANEL: CAMERA VIEWPORT OR TOUCH PAD -->
+            <div class="flex-1 flex flex-col items-center bg-black/95 rounded-3xl overflow-hidden relative border-4 border-white shadow-2xl min-h-[400px] sm:min-h-[500px]">
+                
+                <!-- Mirror Web Camera Feed -->
+                <video id="webcam" class="hidden" autoplay playsinline></video>
+                
+                <!-- Main AR Canvas Rendering -->
+                <canvas id="ar-canvas" class="w-full h-full object-cover min-h-[400px] sm:min-h-[500px] absolute inset-0 z-0 mirrored"></canvas>
+                
+                <!-- Overlay Elements on AR Canvas -->
+                <div class="absolute inset-0 z-10 flex flex-col justify-between p-4 pointer-events-none">
+                    
+                    <!-- HUD Status Bars -->
+                    <div class="flex justify-between items-center w-full">
+                        <!-- Score Display -->
+                        <div class="flex items-center gap-2 bg-black/70 backdrop-blur text-white px-4 py-2 rounded-full border border-white/20">
+                            <span class="text-xl">⭐</span>
+                            <span class="font-bold text-sm sm:text-base">คะแนน: <span id="game-score" class="text-yellow-300 text-lg sm:text-xl">0</span></span>
+                        </div>
+                        
+                        <!-- Controller / Settings Toggle Bar -->
+                        <div class="flex gap-2 pointer-events-auto">
+                            <!-- Toggle Mute -->
+                            <button id="btn-toggle-sound" class="w-10 h-10 rounded-full bg-black/70 hover:bg-black/95 backdrop-blur text-white flex items-center justify-center border border-white/20 transition-all">
+                                <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+                            </button>
+                            <!-- Switch Mode Midgame -->
+                            <button id="btn-toggle-mode" class="px-3 h-10 rounded-full bg-black/70 hover:bg-black/95 backdrop-blur text-white flex items-center justify-center gap-1 border border-white/20 transition-all text-xs font-bold">
+                                <i class="fa-solid fa-rotate"></i> <span id="btn-mode-text">ใช้เมาส์แทน</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AR Instruction Banner -->
+                    <div id="ar-gesture-banner" class="w-full bg-yellow-400/95 text-yellow-950 px-4 py-3 rounded-2xl text-center text-xs sm:text-sm font-bold shadow-lg border-2 border-yellow-500 animate-pulse">
+                        🖐️ กางมือเลื่อนเป้ากลมชี้คำตอบที่ต้องการค้างไว้ &nbsp;|&nbsp
