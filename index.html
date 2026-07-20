@@ -161,4 +161,841 @@
 
                     <!-- AR Instruction Banner -->
                     <div id="ar-gesture-banner" class="w-full bg-yellow-400/95 text-yellow-950 px-4 py-3 rounded-2xl text-center text-xs sm:text-sm font-bold shadow-lg border-2 border-yellow-500 animate-pulse">
-                        🖐️ กางมือเลื่อนเป้ากลมชี้คำตอบที่ต้องการค้างไว้ &nbsp;|&nbsp
+                        🖐️ กางมือเลื่อนเป้ากลมชี้คำตอบที่ต้องการค้างไว้ &nbsp;|&nbsp; ✊ กำมือเมื่อต้องการส่งคำตอบทันที!
+                    </div>
+                </div>
+
+                <!-- Touch Fallback Layer (Active when camera is off or disabled) -->
+                <div id="touch-fallback-overlay" class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-indigo-600 flex flex-col items-center justify-center p-6 text-white text-center hidden z-20">
+                    <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-4xl mb-4 animate-bounce">📱</div>
+                    <h3 class="text-2xl font-bold mb-2">โหมดหน้าจอสัมผัส / เมาส์</h3>
+                    <p class="text-sm opacity-90 max-w-xs mb-4">ใช้นิ้วจิ้มหรือคลิกที่ปุ่มตัวเลือกคำตอบทางขวาได้เลยค่ะ</p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: QUESTION PANEL & SCENARIO DISPLAY -->
+            <div class="w-full lg:w-[480px] flex flex-col justify-between gap-4 p-4 sm:p-6 rounded-3xl glass-card shadow-2xl border-4 border-white">
+                
+                <!-- Current Progress Header -->
+                <div class="w-full">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs uppercase font-extrabold text-green-700 tracking-wider">นักอนุรักษ์ธรรมชาติ</span>
+                        <span class="text-xs font-extrabold text-blue-600 bg-blue-100 px-3 py-1 rounded-full"><span id="q-index">1</span> จาก 10 ข้อ</span>
+                    </div>
+                    <!-- Question progress bar -->
+                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-4">
+                        <div id="q-progress-bar" class="h-full bg-gradient-to-r from-green-400 to-blue-500 w-1/10 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Scenario Card -->
+                <div class="flex-1 flex flex-col items-stretch justify-start bg-white/90 rounded-2xl p-2 border border-white shadow-inner mb-2 relative min-h-[340px]">
+                    <!-- Scenario Title / Question -->
+                    <h2 id="q-text" class="text-base sm:text-lg font-black text-gray-800 text-center leading-snug p-2 mb-1">...</h2>
+                    
+                    <!-- Image Graphic Holder (Perfect responsive container for display) -->
+                    <div id="scenario-graphic" class="w-full h-64 sm:h-72 flex items-center justify-center relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-inner">
+                        <!-- Loaded dynamically via JavaScript using direct filenames S__23625732.jpg to S__23625741.jpg -->
+                    </div>
+                </div>
+
+                <!-- Answer Boxes (Interactable buttons as requested) -->
+                <div class="grid grid-cols-1 gap-3 sm:gap-4 w-full">
+                    
+                    <!-- Target 1: ทำลายชีวิตสัตว์ -->
+                    <button id="target-destroy" class="option-btn w-full p-4 rounded-2xl text-white font-black text-lg sm:text-xl flex items-center justify-between transition-all duration-200 bg-red-500 hover:bg-red-600 retro-shadow-red border-2 border-white relative overflow-hidden">
+                        <span class="flex items-center gap-3">
+                            <span class="text-2xl">🔥</span> ทำลายชีวิตสัตว์
+                        </span>
+                        <i class="fa-solid fa-circle-xmark text-2xl opacity-90"></i>
+                    </button>
+                    
+                    <!-- Target 2: อนุรักษ์ชีวิตสัตว์ -->
+                    <button id="target-conserve" class="option-btn w-full p-4 rounded-2xl text-white font-black text-lg sm:text-xl flex items-center justify-between transition-all duration-200 bg-green-500 hover:bg-green-600 retro-shadow-green border-2 border-white relative overflow-hidden">
+                        <span class="flex items-center gap-3">
+                            <span class="text-2xl">🌱</span> อนุรักษ์ชีวิตสัตว์
+                        </span>
+                        <i class="fa-solid fa-heart text-2xl opacity-90"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SCREEN 3: GAME SUMMARY SCREEN ==================== -->
+        <div id="end-screen" class="hidden w-full max-w-xl text-center p-6 sm:p-8 rounded-3xl glass-card shadow-2xl border-4 border-white bubble-hover flex flex-col items-center">
+            
+            <div id="trophy-holder" class="text-7xl mb-4 animate-bounce">🏆</div>
+            
+            <h1 class="text-3xl font-extrabold text-blue-800 mb-2">เกมจบแล้วจ้า! 🎉</h1>
+            <p class="text-gray-600 text-sm sm:text-base mb-6">คุณได้ช่วยเหลือสัตว์และธรรมชาติอย่างสุดความสามารถ!</p>
+
+            <!-- Score Summary Card -->
+            <div class="w-full bg-white/80 rounded-2xl p-6 border border-white shadow-inner mb-6">
+                <div class="text-gray-500 text-xs font-semibold uppercase tracking-widest">คะแนนรวมของหนู</div>
+                <div class="text-6xl font-black text-yellow-500 my-2 drop-shadow-sm"><span id="final-score">0</span> / 10</div>
+                <div id="evaluation-text" class="text-base sm:text-lg font-bold text-green-700">เยี่ยมไปเลย! สมเป็นนักอนุรักษ์ตัวจริง!</div>
+            </div>
+
+            <!-- Action buttons -->
+            <button id="btn-restart" class="px-10 py-4 bg-gradient-to-r from-green-400 to-emerald-600 text-white font-extrabold text-lg sm:text-xl rounded-2xl bubble-hover retro-shadow-green border-2 border-white w-full sm:w-auto transition-all">
+                <i class="fa-solid fa-rotate-left mr-2"></i> เริ่มใหม่อีกครั้ง 🎮
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* SOUND FX & SPEECH SYNTHESIS MANAGER */
+        class AudioSynthManager {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            toggleMute() {
+                this.muted = !this.muted;
+                return this.muted;
+            }
+
+            // Speak Thai text with Web Speech Synthesis
+            speakThai(text) {
+                if (this.muted) return;
+                try {
+                    if ('speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = 'th-TH';
+                        utterance.rate = 1.05;
+                        utterance.pitch = 1.15; // Slightly child-friendly high pitch
+                        window.speechSynthesis.speak(utterance);
+                    }
+                } catch (e) {
+                    console.error("Speech Synthesis failed:", e);
+                }
+            }
+
+            // Play applause sound & correct chime
+            playCorrect() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                
+                // Speak positive reinforcement
+                this.speakThai("เก่งมากค่ะ ถูกต้องแล้ว");
+
+                // Happy chime notes
+                const notes = [261.63, 329.63, 392.00, 523.25, 659.25]; // C E G C E
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gainNode = this.ctx.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    
+                    gainNode.gain.setValueAtTime(0, now + idx * 0.08);
+                    gainNode.gain.linearRampToValueAtTime(0.12, now + idx * 0.08 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.35);
+                    
+                    osc.connect(gainNode);
+                    gainNode.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.4);
+                });
+
+                // Synthesized Applause Sound
+                const bufferSize = this.ctx.sampleRate * 1.5;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1000;
+                filter.Q.value = 2.0;
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                noise.start(now);
+                noise.stop(now + 1.3);
+            }
+
+            // Play incorrect warning sound & say "เอาใหม่ค่ะ"
+            playIncorrect() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+
+                // Speak "เอาใหม่ค่ะ"
+                this.speakThai("เอาใหม่ค่ะ");
+
+                // Cartoon boing sound slide
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(120, now + 0.35);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        const soundManager = new AudioSynthManager();
+
+        // Exactly mapping 10 questions to provided image attachment files
+        const gameQuestions = [
+            {
+                id: 1,
+                text: "การปล่อยสัตว์คืนสู่ธรรมชาติ",
+                answer: "conserve", // อนุรักษ์ชีวิตสัตว์
+                image: "S__23625740.jpg"
+            },
+            {
+                id: 2,
+                text: "การจับปลาในฤดูวางไข่",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625733.jpg"
+            },
+            {
+                id: 3,
+                text: "การนำลูกปลาทูมาตากแห้ง",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625738.jpg"
+            },
+            {
+                id: 4,
+                text: "การทิ้งขยะให้ถูกที่",
+                answer: "conserve", // อนุรักษ์ชีวิตสัตว์
+                image: "S__23625732.jpg"
+            },
+            {
+                id: 5,
+                text: "การทิ้งขยะพลาสติกลงทะเล",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625741.jpg"
+            },
+            {
+                id: 6,
+                text: "การเผาป่า",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625739.jpg"
+            },
+            {
+                id: 7,
+                text: "การทิ้งขยะพลาสติกลงแม่น้ำ",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625734.jpg"
+            },
+            {
+                id: 8,
+                text: "การตัดไม้ทำลายป่า",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625737.jpg"
+            },
+            {
+                id: 9,
+                text: "การปลูกต้นไม้",
+                answer: "conserve", // อนุรักษ์ชีวิตสัตว์
+                image: "S__23625736.jpg"
+            },
+            {
+                id: 10,
+                text: "การนำลูกอ๊อดมาทำอาหาร",
+                answer: "destroy", // ทำลายชีวิตสัตว์
+                image: "S__23625735.jpg"
+            }
+        ];
+
+        /* CONFETTI PARTICLE SYSTEM FOR REWARDS */
+        class ConfettiManager {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.particles = [];
+                this.active = false;
+            }
+
+            spawn() {
+                this.active = true;
+                this.particles = [];
+                const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#ec4899', '#8b5cf6'];
+                for (let i = 0; i < 60; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: this.canvas.height + Math.random() * 20,
+                        vx: (Math.random() - 0.5) * 8,
+                        vy: -Math.random() * 12 - 8,
+                        size: Math.random() * 5 + 4,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        rotation: Math.random() * 360,
+                        rotationSpeed: (Math.random() - 0.5) * 8,
+                        opacity: 1
+                    });
+                }
+            }
+
+            updateAndRender() {
+                if (!this.active) return;
+                let alive = false;
+                
+                this.particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.35; // Gravity
+                    p.rotation += p.rotationSpeed;
+                    p.opacity -= 0.015;
+
+                    if (p.opacity > 0) {
+                        alive = true;
+                        this.ctx.save();
+                        this.ctx.translate(p.x, p.y);
+                        this.ctx.rotate((p.rotation * Math.PI) / 180);
+                        this.ctx.fillStyle = p.color;
+                        this.ctx.globalAlpha = p.opacity;
+                        this.ctx.fillRect(-p.size, -p.size / 2, p.size * 2, p.size);
+                        this.ctx.restore();
+                    }
+                });
+
+                if (!alive) {
+                    this.active = false;
+                }
+            }
+        }
+
+        class GameEngine {
+            constructor() {
+                this.currentQuestionIdx = 0;
+                this.score = 0;
+                this.gameMode = 'ar'; // default mode 'ar' or 'touch'
+                this.isPlaying = false;
+                
+                // Screen layout references
+                this.targetDestroyRect = null;
+                this.targetConserveRect = null;
+
+                // MediaPipe Hands states
+                this.handDetected = false;
+                this.handX = 0.5;
+                this.handY = 0.5;
+                this.handState = 'open'; // 'open' or 'fist'
+                this.prevHandState = 'open';
+                
+                // Tracking hovered items
+                this.hoveredOption = null; 
+                
+                // Elements references
+                this.webcam = document.getElementById('webcam');
+                this.arCanvas = document.getElementById('ar-canvas');
+                this.arCtx = this.arCanvas.getContext('2d');
+                this.confetti = new ConfettiManager(this.arCanvas);
+
+                this.mediaPipeHands = null;
+                this.mediaStream = null;
+            }
+
+            async init() {
+                this.setupResizeListener();
+                this.resizeCanvas();
+                this.bindDOMEvents();
+                await this.initMediaPipe();
+            }
+
+            setupResizeListener() {
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+
+            resizeCanvas() {
+                const rect = this.arCanvas.parentElement.getBoundingClientRect();
+                this.arCanvas.width = rect.width;
+                this.arCanvas.height = rect.height;
+            }
+
+            async initMediaPipe() {
+                const statusEl = document.getElementById('loading-status');
+                const progressEl = document.getElementById('loading-progress');
+                
+                try {
+                    statusEl.innerText = "กำลังเชื่อมต่อโมเดลปัญญาประดิษฐ์ตรวจจับมือ (AI Hands)...";
+                    progressEl.style.width = "50%";
+
+                    this.mediaPipeHands = new Hands({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+                    });
+
+                    this.mediaPipeHands.setOptions({
+                        maxNumHands: 1,
+                        modelComplexity: 1,
+                        minDetectionConfidence: 0.55,
+                        minTrackingConfidence: 0.55
+                    });
+
+                    this.mediaPipeHands.onResults((results) => this.handleHandTrackingResults(results));
+
+                    statusEl.innerText = "ระบบกล้องเว็บแคมและโหมดจำลองพร้อมทำงานแล้ว!";
+                    progressEl.style.width = "100%";
+                    
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').classList.add('hidden');
+                    }, 800);
+
+                } catch (error) {
+                    console.error("MediaPipe initialization failed:", error);
+                    statusEl.innerHTML = "<span class='text-red-300'>ตรวจพบบราวเซอร์ไม่รองรับกล้อง สลับมาเล่นโหมดสัมผัสให้คุณโดยอัตโนมัติค่ะ</span>";
+                    progressEl.style.backgroundColor = "#ef4444";
+                    
+                    this.setGameMode('touch');
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').classList.add('hidden');
+                    }, 1500);
+                }
+            }
+
+            bindDOMEvents() {
+                // Selector buttons
+                document.getElementById('btn-mode-ar').addEventListener('click', () => this.setGameMode('ar'));
+                document.getElementById('btn-mode-touch').addEventListener('click', () => this.setGameMode('touch'));
+                
+                document.getElementById('btn-toggle-mode').addEventListener('click', () => {
+                    const nextMode = this.gameMode === 'ar' ? 'touch' : 'ar';
+                    this.setGameMode(nextMode);
+                    this.showAlert("🔧 สลับโหมดสำเร็จ", `เปลี่ยนเป็นวิธีเล่นด้วย ${nextMode === 'ar' ? 'กล้องเว็บแคม' : 'นิ้วสัมผัส/เมาส์'}`, nextMode === 'ar' ? '📷' : '📱');
+                });
+
+                document.getElementById('btn-start').addEventListener('click', () => this.startGame());
+
+                document.getElementById('btn-toggle-sound').addEventListener('click', () => {
+                    const isMuted = soundManager.toggleMute();
+                    const icon = document.getElementById('sound-icon');
+                    if (isMuted) {
+                        icon.className = 'fa-solid fa-volume-xmark';
+                        this.showAlert("🔊 ปิดเสียงเรียบร้อย", "ปิดการใช้งานเสียงพากย์และเสียงสังเคราะห์แล้วค่ะ", "🔈");
+                    } else {
+                        icon.className = 'fa-solid fa-volume-high';
+                        this.showAlert("🔊 เปิดเสียงแล้วจ้า", "เปิดระบบเสียงและเสียงพากย์ภาษาไทยแล้วค่ะ", "🔊");
+                    }
+                });
+
+                // Clicks for direct answer selection
+                document.getElementById('target-destroy').addEventListener('click', () => {
+                    if (this.gameMode === 'touch' || !this.handDetected) {
+                        this.processUserAnswer('destroy');
+                    }
+                });
+                document.getElementById('target-conserve').addEventListener('click', () => {
+                    if (this.gameMode === 'touch' || !this.handDetected) {
+                        this.processUserAnswer('conserve');
+                    }
+                });
+
+                document.getElementById('btn-restart').addEventListener('click', () => this.restartGame());
+            }
+
+            setGameMode(mode) {
+                this.gameMode = mode;
+                
+                const btnAr = document.getElementById('btn-mode-ar');
+                const btnTouch = document.getElementById('btn-mode-touch');
+                const arBanner = document.getElementById('ar-gesture-banner');
+                const overlay = document.getElementById('touch-fallback-overlay');
+                const modeText = document.getElementById('btn-mode-text');
+
+                if (mode === 'ar') {
+                    btnAr.className = "p-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-800 font-bold flex flex-col items-center gap-1 transition-all scale-105";
+                    btnTouch.className = "p-3 rounded-xl border-2 border-gray-200 bg-white text-gray-600 font-bold flex flex-col items-center gap-1 transition-all opacity-70";
+                    
+                    arBanner.classList.remove('hidden');
+                    overlay.classList.add('hidden');
+                    modeText.innerText = "ใช้เมาส์แทน";
+                    
+                    this.startCameraStream();
+                } else {
+                    btnTouch.className = "p-3 rounded-xl border-2 border-green-500 bg-green-50 text-green-800 font-bold flex flex-col items-center gap-1 transition-all scale-105";
+                    btnAr.className = "p-3 rounded-xl border-2 border-gray-200 bg-white text-gray-600 font-bold flex flex-col items-center gap-1 transition-all opacity-70";
+                    
+                    arBanner.classList.add('hidden');
+                    overlay.classList.remove('hidden');
+                    modeText.innerText = "ใช้กล้อง AR";
+                    
+                    this.stopCameraStream();
+                }
+            }
+
+            async startCameraStream() {
+                if (this.mediaStream) return;
+                
+                try {
+                    this.mediaStream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        },
+                        audio: false
+                    });
+                    
+                    this.webcam.srcObject = this.mediaStream;
+                    this.webcam.onloadedmetadata = () => {
+                        this.webcam.play();
+                        this.resizeCanvas();
+                    };
+                } catch (error) {
+                    console.error("Camera access failed:", error);
+                    this.showAlert("❌ กล้องเว็บแคมเข้าไม่ได้", "ไม่พบฮาร์ดแวร์กล้อง สลับมาใช้โหมดสัมผัสหน้าจอแทนนะคะ", "📱");
+                    this.setGameMode('touch');
+                }
+            }
+
+            stopCameraStream() {
+                if (this.mediaStream) {
+                    this.mediaStream.getTracks().forEach(track => track.stop());
+                    this.mediaStream = null;
+                }
+                this.webcam.srcObject = null;
+            }
+
+            showAlert(title, msg, emoji) {
+                const alertBox = document.getElementById('custom-alert');
+                const alertTitle = document.getElementById('alert-title');
+                const alertMsg = document.getElementById('alert-msg');
+                const alertIcon = document.getElementById('alert-icon');
+                
+                alertTitle.innerText = title;
+                alertMsg.innerText = msg;
+                alertIcon.innerText = emoji;
+
+                alertBox.classList.remove('opacity-0', '-translate-y-20');
+                alertBox.classList.add('opacity-100', 'translate-y-0');
+
+                setTimeout(() => {
+                    alertBox.classList.add('opacity-0', '-translate-y-20');
+                    alertBox.classList.remove('opacity-100', 'translate-y-0');
+                }, 3500);
+            }
+
+            startGame() {
+                soundManager.init();
+                
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('game-screen').classList.remove('hidden');
+                
+                this.currentQuestionIdx = 0;
+                this.score = 0;
+                this.isPlaying = true;
+
+                this.loadQuestion();
+                this.gameLoop();
+                
+                soundManager.speakThai("เริ่มเกมกันเลยจ้า");
+            }
+
+            loadQuestion() {
+                const q = gameQuestions[this.currentQuestionIdx];
+                
+                document.getElementById('q-index').innerText = q.id;
+                document.getElementById('q-text').innerText = `กิจกรรม: ${q.text}`;
+                document.getElementById('game-score').innerText = this.score;
+                
+                // Show question image directly with local verbatim name, with a cute SVG placeholder if the image takes time to load
+                const placeholderUrl = `https://placehold.co/600x450/dcfce7/15803d?text=${encodeURIComponent(q.text)}`;
+
+                document.getElementById('scenario-graphic').innerHTML = `
+                    <img src="${q.image}" alt="${q.text}" class="w-full h-full object-cover rounded-xl transition-all duration-300" onerror="this.onerror=null; this.src='${placeholderUrl}';">
+                `;
+
+                // Update Progress bar width
+                const percent = ((q.id) / 10) * 100;
+                document.getElementById('q-progress-bar').style.width = `${percent}%`;
+
+                setTimeout(() => {
+                    this.updateInteractiveBounds();
+                }, 400);
+            }
+
+            updateInteractiveBounds() {
+                const btnDestroy = document.getElementById('target-destroy');
+                const btnConserve = document.getElementById('target-conserve');
+                
+                const canvasBounds = this.arCanvas.getBoundingClientRect();
+
+                const bD = btnDestroy.getBoundingClientRect();
+                const bC = btnConserve.getBoundingClientRect();
+
+                this.targetDestroyRect = {
+                    left: bD.left - canvasBounds.left,
+                    top: bD.top - canvasBounds.top,
+                    right: bD.right - canvasBounds.left,
+                    bottom: bD.bottom - canvasBounds.top
+                };
+
+                this.targetConserveRect = {
+                    left: bC.left - canvasBounds.left,
+                    top: bC.top - canvasBounds.top,
+                    right: bC.right - canvasBounds.left,
+                    bottom: bC.bottom - canvasBounds.top
+                };
+            }
+
+            processUserAnswer(userChoice) {
+                if (!this.isPlaying) return;
+                
+                const q = gameQuestions[this.currentQuestionIdx];
+                const isCorrect = q.answer === userChoice;
+
+                this.isPlaying = false; // Block inputs during reward/error showcase
+
+                const btnTarget = userChoice === 'destroy' ? 
+                    document.getElementById('target-destroy') : 
+                    document.getElementById('target-conserve');
+
+                if (isCorrect) {
+                    this.score++;
+                    soundManager.playCorrect();
+                    this.confetti.spawn(); // Play celebration confetti
+                    
+                    btnTarget.classList.add('scale-105', 'ring-4', 'ring-yellow-400', 'shadow-2xl');
+                    this.showAlert("🎉 เก่งมากเลยจ้า!", "คำตอบถูกต้อง ได้รับคะแนนสะสม 1 คะแนน", "🏆");
+                } else {
+                    soundManager.playIncorrect(); // Play boing sound and "เอาใหม่ค่ะ"
+                    
+                    btnTarget.classList.add('animate-pulse', 'ring-4', 'ring-red-500');
+                    this.showAlert("❌ เอาใหม่นะคะ", "ทบทวนเรื่องนี้แล้วเลือกแนวทางที่ถูกต้องกันใหม่นะคนเก่ง", "🌿");
+                }
+
+                setTimeout(() => {
+                    btnTarget.classList.remove('scale-105', 'ring-4', 'ring-yellow-400', 'ring-red-500', 'shadow-2xl', 'animate-pulse');
+                    
+                    this.currentQuestionIdx++;
+                    if (this.currentQuestionIdx < gameQuestions.length) {
+                        this.isPlaying = true;
+                        this.loadQuestion();
+                    } else {
+                        this.endGame();
+                    }
+                }, 2800);
+            }
+
+            endGame() {
+                this.isPlaying = false;
+                this.stopCameraStream();
+                
+                document.getElementById('game-screen').classList.add('hidden');
+                document.getElementById('end-screen').classList.remove('hidden');
+
+                const scoreSpan = document.getElementById('final-score');
+                const evalText = document.getElementById('evaluation-text');
+                const trophy = document.getElementById('trophy-holder');
+                
+                scoreSpan.innerText = this.score;
+
+                if (this.score >= 8) {
+                    trophy.innerText = "🏆🥇";
+                    evalText.innerText = "ยอดเยี่ยมที่สุดเลย! สมเป็นสุดยอดฮีโร่นักอนุรักษ์ธรรมชาติอย่างแท้จริง! 🌳✨";
+                    evalText.className = "text-xl font-bold text-green-700 animate-pulse";
+                    soundManager.speakThai("ยอดเยี่ยมมากค่ะ สมกับเป็นฮีโร่นักอนุรักษ์ตัวจริง");
+                } else if (this.score >= 5) {
+                    trophy.innerText = "🥈🌿";
+                    evalText.innerText = "เก่งมากเลยจ้า! หนูกำลังก้าวเป็นผู้ปกป้องธรรมชาติและป่าไม้ที่ดีแล้วนะ! 🌲";
+                    evalText.className = "text-lg font-bold text-blue-700";
+                    soundManager.speakThai("เก่งมากเลยค่ะ มีแววเป็นนักอนุรักษ์ป่าที่ดีแล้วนะคะ");
+                } else {
+                    trophy.innerText = "🥉🌟";
+                    evalText.innerText = "ดีมากเลยจ้า! ค่อยๆ เรียนรู้และช่วยกันพิทักษ์ป่าและชีวิตสัตว์โลกไปด้วยกันใหม่นะ! 💪";
+                    evalText.className = "text-md font-bold text-orange-600";
+                    soundManager.speakThai("ดีมากค่ะ ค่อยๆ เรียนรู้ไปพร้อมกันใหม่นะลูก");
+                }
+            }
+
+            restartGame() {
+                document.getElementById('end-screen').classList.add('hidden');
+                document.getElementById('start-screen').classList.remove('hidden');
+                this.setGameMode(this.gameMode);
+            }
+
+            handleHandTrackingResults(results) {
+                if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+                    this.handDetected = false;
+                    return;
+                }
+
+                this.handDetected = true;
+                const landmarks = results.multiHandLandmarks[0];
+
+                // Track index finger tip (landmark 8)
+                const indexTip = landmarks[8];
+                this.handX = indexTip.x;
+                this.handY = indexTip.y;
+
+                // GESTURE CALCULATION (Open Hand vs Fist)
+                const mcpIndex = landmarks[5];
+                const mcpPinky = landmarks[17];
+                const handScale = Math.hypot(mcpIndex.x - mcpPinky.x, mcpIndex.y - mcpPinky.y);
+
+                const dIndex = Math.hypot(landmarks[8].x - landmarks[5].x, landmarks[8].y - landmarks[5].y);
+                const dMiddle = Math.hypot(landmarks[12].x - landmarks[9].x, landmarks[12].y - landmarks[9].y);
+                const dRing = Math.hypot(landmarks[16].x - landmarks[13].x, landmarks[16].y - landmarks[13].y);
+                const dPinky = Math.hypot(landmarks[20].x - landmarks[17].x, landmarks[20].y - landmarks[17].y);
+
+                const threshold = handScale * 0.95;
+                let foldedFingersCount = 0;
+                if (dIndex < threshold) foldedFingersCount++;
+                if (dMiddle < threshold) foldedFingersCount++;
+                if (dRing < threshold) foldedFingersCount++;
+                if (dPinky < threshold) foldedFingersCount++;
+
+                this.prevHandState = this.handState;
+                
+                if (foldedFingersCount >= 3) {
+                    this.handState = 'fist';
+                } else if (foldedFingersCount <= 1) {
+                    this.handState = 'open';
+                }
+            }
+
+            async gameLoop() {
+                if (!this.isPlaying && !this.confetti.active) {
+                    requestAnimationFrame(() => this.gameLoop());
+                    return;
+                }
+
+                this.arCtx.clearRect(0, 0, this.arCanvas.width, this.arCanvas.height);
+
+                if (this.gameMode === 'ar') {
+                    if (this.webcam.readyState === this.webcam.HAVE_ENOUGH_DATA) {
+                        this.arCtx.save();
+                        this.arCtx.translate(this.arCanvas.width, 0);
+                        this.arCtx.scale(-1, 1);
+                        this.arCtx.drawImage(this.webcam, 0, 0, this.arCanvas.width, this.arCanvas.height);
+                        this.arCtx.restore();
+
+                        try {
+                            await this.mediaPipeHands.send({ image: this.webcam });
+                        } catch (err) {
+                            console.error("Frame analysis error:", err);
+                        }
+                    }
+
+                    if (this.handDetected && this.isPlaying) {
+                        const ptrX = this.handX * this.arCanvas.width;
+                        const ptrY = this.handY * this.arCanvas.height;
+
+                        this.updateInteractiveBounds();
+                        let currentlyHovered = null;
+
+                        if (this.targetDestroyRect && 
+                            ptrX >= this.targetDestroyRect.left && ptrX <= this.targetDestroyRect.right &&
+                            ptrY >= this.targetDestroyRect.top && ptrY <= this.targetDestroyRect.bottom) {
+                            currentlyHovered = 'destroy';
+                        }
+                        else if (this.targetConserveRect && 
+                            ptrX >= this.targetConserveRect.left && ptrX <= this.targetConserveRect.right &&
+                            ptrY >= this.targetConserveRect.top && ptrY <= this.targetConserveRect.bottom) {
+                            currentlyHovered = 'conserve';
+                        }
+
+                        this.hoveredOption = currentlyHovered;
+
+                        const btnD = document.getElementById('target-destroy');
+                        const btnC = document.getElementById('target-conserve');
+                        
+                        btnD.classList.remove('scale-105', 'bg-red-600');
+                        btnC.classList.remove('scale-105', 'bg-green-600');
+
+                        if (currentlyHovered === 'destroy') {
+                            btnD.classList.add('scale-105', 'bg-red-600');
+                        } else if (currentlyHovered === 'conserve') {
+                            btnC.classList.add('scale-105', 'bg-green-600');
+                        }
+
+                        // Trigger option selected on Open (🖐️) to Fist (✊) hand gesture transition
+                        if (currentlyHovered && this.prevHandState === 'open' && this.handState === 'fist') {
+                            this.processUserAnswer(currentlyHovered);
+                        }
+
+                        this.drawHandCursor(ptrX, ptrY);
+                    }
+                }
+
+                this.confetti.updateAndRender();
+
+                requestAnimationFrame(() => this.gameLoop());
+            }
+
+            drawHandCursor(x, y) {
+                this.arCtx.save();
+                
+                // Outer ring
+                this.arCtx.beginPath();
+                this.arCtx.arc(x, y, 22, 0, 2 * Math.PI);
+                this.arCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                this.arCtx.lineWidth = 4;
+                this.arCtx.shadowBlur = 12;
+                this.arCtx.shadowColor = this.handState === 'fist' ? '#f59e0b' : '#3b82f6';
+                this.arCtx.stroke();
+
+                // Inner dot
+                this.arCtx.beginPath();
+                this.arCtx.arc(x, y, 9, 0, 2 * Math.PI);
+                this.arCtx.fillStyle = this.handState === 'fist' ? '#f59e0b' : '#3b82f6';
+                this.arCtx.fill();
+
+                // Gesture emoji hint float
+                this.arCtx.font = "24px Arial";
+                this.arCtx.fillStyle = "#ffffff";
+                const icon = this.handState === 'fist' ? "✊" : "🖐️";
+                this.arCtx.fillText(icon, x - 12, y - 32);
+
+                this.arCtx.restore();
+            }
+        }
+
+        window.onload = () => {
+            const game = new GameEngine();
+            game.init();
+        };
+    </script>
+</body>
+</html>
+```
+eof
+```
+
+### 🌲 สรุปการปรับปรุงแก้ไข
+1. **จับคู่แสดงผลภาพโจทย์โดยตรงทันที (No more Upload Tool):** นำส่วนปุ่มเครื่องมือช่วยอัปโหลดออกเพื่อป้องกันความสับสน และสร้างรหัสให้ดึงไฟล์ภาพที่ถูกต้องของข้อนั้นๆ ขึ้นมาแสดงผลคู่กับโจทย์ในแต่ละข้อทันทีอย่างสง่างาม
+2. **ระบบดึงภาพตรงตามโจทย์:** 
+   - ข้อ 1 การปล่อยสัตว์คืนสู่ธรรมชาติ -> แสดงภาพ `S__23625740.jpg`
+   - ข้อ 2 การจับปลาในฤดูวางไข่ -> แสดงภาพ `S__23625733.jpg`
+   - ข้อ 3 การนำลูกปลาทูมาตากแห้ง -> แสดงภาพ `S__23625738.jpg`
+   - ข้อ 4 การทิ้งขยะให้ถูกที่ -> แสดงภาพ `S__23625732.jpg`
+   - ข้อ 5 การทิ้งขยะพลาสติกลงทะเล -> แสดงภาพ `S__23625741.jpg`
+   - ข้อ 6 การเผาป่า -> แสดงภาพ `S__23625739.jpg`
+   - ข้อ 7 การทิ้งขยะพลาสติกลงแม่น้ำ -> แสดงภาพ `S__23625734.jpg`
+   - ข้อ 8 การตัดไม้ทำลายป่า -> แสดงภาพ `S__23625737.jpg`
+   - ข้อ 9 การปลูกต้นไม้ -> แสดงภาพ `S__23625736.jpg`
+   - ข้อ 10 การนำลูกอ๊อดมาทำอาหาร -> แสดงภาพ `S__23625735.jpg`
+3. **ระบบพากย์เสียง "เอาใหม่ค่ะ" และเสียงปรบมือ:** เมื่อเด็กๆ ตอบผิด ระบบจะพูดพากย์ออกลำโพงตัวเครื่องด้วยน้ำเสียงเอฟเฟกต์เบาๆ เป็นธรรมชาติว่า *"เอาใหม่ค่ะ"* ทันที และสังเคราะห์เสียงปรบมือร่าเริงประกอบคอร์ด Chime เมื่อตอบถูก
+4. **โหมดความปลอดภัย:** หากเป็นเครื่องที่ไม่มีกล้องเว็บแคม หรือผู้ใช้กดเลือกเล่นแบบ "หน้าจอสัมผัส/เมาส์" ตัวระบบจะทำงานแบบสัมผัสโดยตรง เพื่อให้พร้อมเล่นได้ในทุกสถานการณ์อย่างไหลลื่นและปลอดภัยครับ
